@@ -1,0 +1,113 @@
+package x;
+
+import java.util.Scanner;
+
+public class lab2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String opcion;
+
+        do {
+            System.out.println("Seleccione el tipo de planilla:");
+            System.out.println("1. Mensual");
+            System.out.println("2. Semanal");
+            int tipoPlanilla = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+
+            if (tipoPlanilla == 1) {
+                procesarPlanillaMensual(scanner);
+            } else if (tipoPlanilla == 2) {
+                procesarPlanillaSemanal(scanner);
+            } else {
+                System.out.println("⚠ Opción no válida. Intente de nuevo.");
+            }
+
+            System.out.print("¿Desea continuar? (S/Si/N/No): ");
+            opcion = scanner.nextLine().trim().toLowerCase();
+        } while (opcion.equals("s") || opcion.equals("si"));
+
+        System.out.println("Cerrando programa... ¡Hasta luego!");
+        scanner.close();
+    }
+
+    public static void procesarPlanillaMensual(Scanner scanner) {
+        String nombre = leerCadena(scanner, "Ingrese el nombre: ");
+        String cedula = leerCadena(scanner, "Ingrese la cédula: ");
+
+        double salarioMensual = leerDouble(scanner, "Ingrese el salario mensual (500 - 1500): ", 500, 1500);
+        int sexo = (int) leerDouble(scanner, "Ingrese el sexo (1 para M, 2 para F): ", 1, 2);
+
+        double seguroSocial = salarioMensual * 0.0925;
+        double seguroEducativo = salarioMensual * 0.0125;
+        double impuestoRenta = salarioMensual * (sexo == 1 ? 0.1275 : 0.1025);
+        double ahorro = salarioMensual * 0.15;
+        double totalDeducciones = seguroSocial + seguroEducativo + impuestoRenta + ahorro;
+        double salarioNeto = salarioMensual - totalDeducciones;
+
+        System.out.println("\nResultados - Planilla Mensual:");
+        System.out.printf("Nombre: %s\nCédula: %s\n", nombre, cedula);
+        System.out.printf("Salario mensual: $%.2f\n", salarioMensual);
+        System.out.printf("Seguro Social: $%.2f\nSeguro Educativo: $%.2f\n", seguroSocial, seguroEducativo);
+        System.out.printf("Impuesto sobre la renta: $%.2f\nAhorro: $%.2f\n", impuestoRenta, ahorro);
+        System.out.printf("Total Deducciones: $%.2f\nSalario Neto: $%.2f\n", totalDeducciones, salarioNeto);
+    }
+
+    public static void procesarPlanillaSemanal(Scanner scanner) {
+        String nombre = leerCadena(scanner, "Ingrese el nombre: ");
+        String cedula = leerCadena(scanner, "Ingrese la cédula: ");
+
+        double salarioHora = leerDouble(scanner, "Ingrese el salario por hora (2.25 - 7.25): ", 2.25, 7.25);
+        double horasRegulares = leerDouble(scanner, "Ingrese las horas regulares trabajadas (1 - 48): ", 1, 48);
+        double horasExtras = leerDouble(scanner, "Ingrese las horas extras trabajadas (0 - 18): ", 0, 18);
+
+        double salarioHorasRegulares = horasRegulares * salarioHora;
+        double salarioHorasExtras = horasExtras * (salarioHora * 1.1575);
+        double salarioBruto = salarioHorasRegulares + salarioHorasExtras;
+
+        double seguroSocial = salarioBruto * 0.0925;
+        double seguroEducativo = salarioBruto * 0.0125;
+        double ahorro = salarioBruto * 0.1275;
+        double totalDeducciones = seguroSocial + seguroEducativo + ahorro;
+        double salarioNeto = salarioBruto - totalDeducciones;
+
+        System.out.println("\nResultados - Planilla Semanal:");
+        System.out.printf("Nombre: %s\nCédula: %s\n", nombre, cedula);
+        System.out.printf("Salario por hora: $%.2f\n", salarioHora);
+        System.out.printf("Horas regulares: %.2f\nHoras extras: %.2f\n", horasRegulares, horasExtras);
+        System.out.printf("Salario Bruto: $%.2f\n", salarioBruto);
+        System.out.printf("Seguro Social: $%.2f\nSeguro Educativo: $%.2f\n", seguroSocial, seguroEducativo);
+        System.out.printf("Ahorro: $%.2f\nTotal Deducciones: $%.2f\n", ahorro, totalDeducciones);
+        System.out.printf("Salario Neto: $%.2f\n", salarioNeto);
+    }
+
+    public static String leerCadena(Scanner scanner, String mensaje) {
+        String entrada;
+        do {
+            System.out.print(mensaje);
+            entrada = scanner.nextLine().trim();
+            if (entrada.isEmpty()) {
+                System.out.println("⚠ Error: El campo no puede estar vacío. Inténtelo nuevamente.");
+            }
+        } while (entrada.isEmpty());
+        return entrada;
+    }
+
+    public static double leerDouble(Scanner scanner, String mensaje, double min, double max) {
+        double numero;
+        while (true) {
+            System.out.print(mensaje);
+            if (scanner.hasNextDouble()) {
+                numero = scanner.nextDouble();
+                scanner.nextLine(); // Limpiar buffer
+                if (numero >= min && numero <= max) {
+                    return numero;
+                } else {
+                    System.out.printf("⚠ Error: El valor debe estar entre %.2f y %.2f. Intente de nuevo.\n", min, max);
+                }
+            } else {
+                System.out.println("⚠ Error: Ingrese un número válido.");
+                scanner.next(); // Descartar entrada incorrecta
+            }
+        }
+    }
+}
