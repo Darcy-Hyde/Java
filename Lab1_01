@@ -1,0 +1,44 @@
+package x;
+
+import java.util.Scanner;
+public class lab01_prob1 {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		int valorDia;
+		
+		//Leer el valor asegurando que esta en el valor de 1 a 7
+		
+		do {
+			System.out.print("Ingrese un numero de 1 a 7 para representar un dia de la semana: ");
+			valorDia = scanner.nextInt();
+		} while (valorDia < 1 ||valorDia > 7);
+		
+		//Obtener el nombre del dia de la semana
+		String diaSemana = obtenerDiaSem(valorDia);
+		
+		//Calcular cuadrado y cubo del numero ingresado
+		int cuadrado = valorDia * valorDia;
+		int cubo = cuadrado * valorDia;
+		int suma = cuadrado + cubo;
+		
+		//Imprimir resultados
+		
+		System.out.println("\nResultados:");
+			System.out.println("Dia ingresado: " + valorDia + " - " + diaSemana);
+			System.out.println("Cuadrado: " + cuadrado);
+			System.out.println("Cubo: " + cubo);
+			System.out.println("Suma de cuadrado y cubo: " + suma);
+			
+			System.out.println("\nCierre del programa . . .");
+			scanner.close();
+		}
+	
+	//Metodo para obtener el nombre del dia de la semana
+	public static String
+	obtenerDiaSem(int numero) {
+		String[] dias = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
+		return dias [numero - 1];
+	}
+	
+}
