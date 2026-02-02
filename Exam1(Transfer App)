@@ -1,0 +1,185 @@
+package x;
+
+import java.util.Scanner;
+
+public class parcial1 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String continuar;
+
+        do {
+            String cedula;
+            do {
+                System.out.print("Ingrese su cedula (No puede dejar el espacio vacio): ");
+                cedula = sc.nextLine().trim();
+            } while (cedula.isEmpty());
+
+            String emisor;
+            do {
+                System.out.print("El nombre del emisor (No puede dejar el espacio vacio): ");
+                emisor = sc.nextLine().trim();
+            } while (emisor.isEmpty());
+
+            String celular;
+            do {
+                System.out.print("Ingrese el numero celular del emisor (⚠️ No puede dejar el espacio vacio): ");
+                celular = sc.nextLine().trim();
+            } while (celular.isEmpty());
+
+            String email;
+            do {
+                System.out.print("Ingrese el email del emisor (⚠️ No puede dejar el espacio vacio): ");
+                email = sc.nextLine().trim();
+            } while (email.isEmpty());
+
+            String profesion;
+            do {
+                System.out.print("Ingrese la profesion del emisor (⚠️ No puede dejar el espacio vacio): ");
+                profesion = sc.nextLine().trim();
+            } while (profesion.isEmpty());
+
+            String receptor;
+            do {
+                System.out.print("Ingrese el nombre del receptor (⚠️ No puede dejar el espacio vacio): ");
+                receptor = sc.nextLine().trim();
+            } while (receptor.isEmpty());
+
+            String pemisor, preceptora;
+            do {
+                System.out.print("Ingrese la provincia emisora (⚠️ No puede dejar el espacio vacio): ");
+                pemisor = sc.nextLine().trim();
+            } while (pemisor.isEmpty());
+
+            do {
+                System.out.print("Ingrese la provincia receptora (⚠️ No puede dejar el espacio vacio): ");
+                preceptora = sc.nextLine().trim();
+                if (pemisor.equalsIgnoreCase(preceptora)) {
+                    System.out.println("❌ Error. La provincia emisora no puede ser igual a la provincia receptora");
+                }
+            } while (preceptora.isEmpty() || pemisor.equalsIgnoreCase(preceptora));
+
+            String fecha;
+            do {
+                System.out.print("Ingrese fecha-mes-año (⚠️ No puede dejar el espacio vacio): ");
+                fecha = sc.nextLine().trim();
+            } while (fecha.isEmpty());
+
+            int factura;
+            do {
+                System.out.print("Ingrese el numero de la factura (mayor que 0): ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("⚠️ Debe ingresar un número entero.");
+                    sc.next();
+                }
+                factura = sc.nextInt();
+            } while (factura <= 0);
+
+            System.out.println("\nTipos de Envio:");
+            System.out.println("1. Sobre Blanco - $2.00");
+            System.out.println("2. Sobre Amarillo - $3.00");
+            System.out.println("3. Paquete - $4.00");
+            System.out.println("4. Caja - $5.00");
+
+            int tipoenvio;
+            do {
+                System.out.print("Seleccione el tipo de envío (1-4): ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("⚠️ Debe ingresar un número entre 1 y 4.");
+                    sc.next();
+                }
+                tipoenvio = sc.nextInt();
+            } while (tipoenvio < 1 || tipoenvio > 4);
+
+            int cant;
+            do {
+                System.out.print("Cantidad (La cantidad debe ser mayor que 0): ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("⚠️ Debe ingresar un número mayor a 0.");
+                    sc.next();
+                }
+                cant = sc.nextInt();
+            } while (cant <= 0);
+
+            double precioUnit = switch (tipoenvio) {
+                case 1 -> 2.00;
+                case 2 -> 3.00;
+                case 3 -> 4.00;
+                case 4 -> 5.00;
+                default -> 0.00;
+            };
+
+            double subtotal = precioUnit * cant;
+
+            System.out.println("\nTipo de Pago:");
+            System.out.println("1. Efectivo");
+            System.out.println("2. Tarjeta de Crédito");
+
+            int tipoPago;
+            do {
+                System.out.print("Seleccione el tipo de pago (1-2): ");
+                while (!sc.hasNextInt()) {
+                    System.out.println("⚠️ Debe ingresar 1 o 2.");
+                    sc.next();
+                }
+                tipoPago = sc.nextInt();
+            } while (tipoPago < 1 || tipoPago > 2);
+
+            double descuento = (tipoPago == 1) ? subtotal * 0.05 : 0;
+            double recargo = (tipoPago == 2) ? subtotal * 0.0725 : 0;
+            double totalFinal = subtotal - descuento + recargo;
+
+            sc.nextLine(); // Limpiar
+
+            // Imprimir recibo
+            System.out.println("==============================================\n");
+            System.out.println("\n				------------------------------");
+            System.out.println("			Envíos & Transferencias Xtra$, S. A.");
+            System.out.println("			RECIBO & ENVÍO DE TRANSFERENCIAS");
+            System.out.println("				------------------------------");
+            System.out.println("Programado por: Débora Cisneros");
+            System.out.println("");
+            System.out.println("Factura No. " + factura);
+            System.out.println("Cédula: " + cedula + "	    Nombre: " + emisor + "	    Celular: " + celular);
+            System.out.println("Email: " + email + "	    Profesión: " + profesion);
+            System.out.println("");
+            System.out.println("Ag. Envío: " + pemisor + "	    Ag. Recibe: " + preceptora);
+            System.out.println("Nombre del Receptor: " + receptor);
+            System.out.println("");
+            System.out.println("\nDetalle del Envío:");
+            System.out.println("Cantidad\tTipo de Envío\t\tPrecio\tTotal x Línea");
+            System.out.printf("%d\t\t%s\t\t$%.2f\t$%.2f\n",
+                    cant,
+                    switch (tipoenvio) {
+                        case 1 -> "Sobre Blanco";
+                        case 2 -> "Sobre Amarillo";
+                        case 3 -> "Paquete";
+                        case 4 -> "Caja";
+                        default -> "Desconocido";
+                    },
+                    precioUnit, subtotal);
+            System.out.println("\nTipo de Pago: " + (tipoPago == 1 ? "Efectivo" : "Tarjeta de Crédito"));
+            System.out.printf("Sub Total:\t\t\t$%.2f\n", subtotal);
+            System.out.printf("Descuento (Pago en Efectivo) -\t$%.2f\n", descuento);
+            System.out.printf("Recargo (por Tarjeta de Crédito) +\t$%.2f\n", recargo);
+            System.out.printf("Precio Total:\t$%.2f\n", totalFinal);
+
+            
+            System.out.println("==============================================\n");
+            
+         // Preguntar si desea continuar
+            do {
+                System.out.print("Desea realizar otra factura? (S/s/si/N/n/no): ");
+                continuar = sc.nextLine().trim().toLowerCase();
+                if (continuar.isEmpty()) System.out.println("⚠️ No puede dejar el campo vacío.");
+            } while (
+                continuar.isEmpty() ||
+                !(continuar.equals("s") || continuar.equals("si") ||
+                  continuar.equals("n") || continuar.equals("no"))
+            );
+
+        } while (continuar.equals("s") || continuar.equals("si"));
+
+        System.out.println("\nPrograma finalizado. Gracias por utilizar el sistema.");
+        sc.close();
+    }
+}
