@@ -1,0 +1,187 @@
+package x;
+
+import java.util.Scanner;
+
+public class Proyecto1 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String continuar;
+
+        do {
+            // Captura de Datos Generales
+            String cedula;
+            do {
+                System.out.print("Ingrese su cédula: ");
+                cedula = scanner.nextLine().trim();
+                if (cedula.isEmpty()) System.out.println("⚠️ No puede dejar la cédula vacía.");
+            } while (cedula.isEmpty());
+
+            String nombre;
+            do {
+                System.out.print("Ingrese su nombre: ");
+                nombre = scanner.nextLine().trim();
+                if (nombre.isEmpty()) System.out.println("⚠️ No puede dejar el nombre vacío.");
+            } while (nombre.isEmpty());
+
+            String contacto;
+            do {
+                System.out.print("Ingrese su número de contacto: ");
+                contacto = scanner.nextLine().trim();
+                if (contacto.isEmpty()) System.out.println("⚠️ No puede dejar el contacto vacío.");
+            } while (contacto.isEmpty());
+
+            String profesion;
+            do {
+                System.out.print("Ingrese su profesión: ");
+                profesion = scanner.nextLine().trim();
+                if (profesion.isEmpty()) System.out.println("⚠️ No puede dejar la profesión vacía.");
+            } while (profesion.isEmpty());
+
+            // Captura de Tipo de Bien
+            int tipoBien;
+            do {
+                System.out.print("Tipo de Bien (14 = Lote, 23 = Vivienda): ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("⚠️ Debe ingresar 14 o 23.");
+                    scanner.next();
+                }
+                tipoBien = scanner.nextInt();
+                if (tipoBien != 14 && tipoBien != 23) System.out.println("⚠️ Opcion inválida.");
+            } while (tipoBien != 14 && tipoBien != 23);
+
+            // Captura de Forma de Compra
+            int formaCompra;
+            do {
+                System.out.print("Forma de Compra (1 = Contado, 2 = Financiamiento): ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("⚠️ Debe ingresar 1 o 2.");
+                    scanner.next();
+                }
+                formaCompra = scanner.nextInt();
+                if (formaCompra != 1 && formaCompra != 2) System.out.println("⚠️ Forma de compra inválida.");
+            } while (formaCompra != 1 && formaCompra != 2);
+
+            // Variables de cálculo
+            int cantTerreno = 0;
+            double valorTerreno = 0;
+            double valorVivienda = 0;
+            double interes = 0;
+            double comisionVenta = 0;
+            double totalVenta = 0;
+            double descuento = 0;
+
+            // Proceso de cálculo según el tipo de bien y forma de compra
+            switch (tipoBien) {
+                case 14: // Lote
+                    do {
+                        System.out.print("Ingrese cantidad de terreno en m² (1000 - 5000): ");
+                        while (!scanner.hasNextInt()) {
+                            System.out.println("⚠️ Error: ingrese un valor numérico.");
+                            scanner.next();
+                        }
+                        cantTerreno = scanner.nextInt();
+                        if (cantTerreno < 1000 || cantTerreno > 5000) System.out.println("⚠️ Terreno fuera de rango.");
+                    } while (cantTerreno < 1000 || cantTerreno > 5000);
+
+                    valorTerreno = cantTerreno * 25.00;
+
+                    switch (formaCompra) {
+                        case 1: // Contado
+                            descuento = valorTerreno * 0.10;
+                            totalVenta = valorTerreno - descuento;
+                            break;
+                        case 2: // Financiamiento
+                            interes = valorTerreno * 0.1275;
+                            comisionVenta = valorTerreno * 0.0925;
+                            totalVenta = valorTerreno + interes + comisionVenta;
+                            break;
+                    }
+                    break;
+
+                case 23: // Vivienda
+                    do {
+                        System.out.print("Ingrese el valor de la vivienda ($5,000 - $15,000): ");
+                        while (!scanner.hasNextDouble()) {
+                            System.out.println("⚠️ Error: ingrese un valor numérico.");
+                            scanner.next();
+                        }
+                        valorVivienda = scanner.nextDouble();
+                        if (valorVivienda < 5000 || valorVivienda > 15000) System.out.println("⚠️ Valor fuera de rango.");
+                    } while (valorVivienda < 5000 || valorVivienda > 15000);
+
+                    switch (formaCompra) {
+                        case 1: // Contado
+                            descuento = valorVivienda * 0.10;
+                            totalVenta = valorVivienda - descuento;
+                            break;
+                        case 2: // Financiamiento
+                            interes = valorVivienda * 0.0775;
+                            comisionVenta = valorVivienda * 0.0925;
+                            totalVenta = valorVivienda + interes + comisionVenta;
+                            break;
+                    }
+                    break;
+            }
+
+            // Salida formateada
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println("=================================================================================");
+            System.out.println("     	        	 COMERCIALIZADORA DE PRODUCTOS INMOBILIARIOS");
+            System.out.println("=================================================================================");
+            System.out.println();
+            System.out.printf("Programado por: Débora Cisneros\n");
+            System.out.println();
+            System.out.printf("Nombre: %-47s 	Forma de Pago: %s\n\n", nombre, (formaCompra == 1 ? "Contado" : "Financiamiento"));
+
+            // Ajustar las alineaciones de los campos
+            System.out.println();
+            System.out.println("===================================");
+            System.out.println("	Datos Generales:");
+            System.out.println("===================================");
+            System.out.printf("1. Cédula: %-20s 	2. Nombre: %-20s 	3. Contacto: %-15s 	4. Profesión: %-15s\n", cedula, nombre, contacto, profesion);
+            System.out.printf("5. Tipo de Bien: %-15s 	6. Forma de Compra: %-15s\n", (tipoBien == 14 ? "Lote" : "Vivienda"), (formaCompra == 1 ? "Contado" : "Financiamiento"));
+
+            if (tipoBien == 14) {
+                System.out.println();
+                System.out.println("\nLote:");
+                System.out.printf("  7. Cant. de Terreno: %-10d m² 	8. Valor del Lote: %-15.2f 	9. Intereses: %-15.2f 	10. Comisión de venta: %-10.2f\n", cantTerreno, valorTerreno, interes, comisionVenta);
+                System.out.printf(" 11. Total de Venta: %-15.2f\n", totalVenta);
+            } else {
+                System.out.println("\nVivienda:");
+                System.out.printf("  7. Valor del Bien: %-15.2f 	8. Intereses: %-15.2f 	9. Comisión venta: %-10.2f 	10. Total de Venta: %-10.2f\n", valorVivienda, interes, comisionVenta, totalVenta);
+            }
+
+            // Proceso de Contado
+            if (formaCompra == 1) {
+                System.out.println();
+                System.out.println("\nProceso de Contado:");
+                System.out.printf("	Lote o Vivienda: Valor del Bien: %-15.2f 	Descuento: %-15.2f 	Total de la venta: %-15.2f\n", (tipoBien == 14 ? valorTerreno : valorVivienda), descuento, totalVenta);
+            }
+
+            System.out.println("----------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("%105sB/. %-10.2f\n", "Descuento (10%):", descuento);
+            System.out.printf("%105sB/. %-10.2f\n", "Total de Venta: ", totalVenta);
+            System.out.println("----------------------------------------------------------------------------------------------------------------------");
+
+            // Preguntar si desea continuar
+            do {
+                System.out.print("\nDesea realizar otra factura? (S/s/si/N/n/no): ");
+                continuar = scanner.nextLine().trim().toLowerCase();
+
+                if (continuar.isEmpty()) {
+                    System.out.println("⚠ Advertencia: No puede dejar el campo vacio.");
+                }
+            } while (
+                continuar.isEmpty() ||
+                !(continuar.equals("s") || continuar.equals("si") ||
+                  continuar.equals("n") || continuar.equals("no"))
+            );
+
+        } while (continuar.equals("s") || continuar.equals("si"));
+
+        System.out.println("\nPrograma finalizado. Gracias por utilizar el sistema.");
+        scanner.close();
+    }
+}
