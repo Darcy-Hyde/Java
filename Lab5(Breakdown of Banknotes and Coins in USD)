@@ -1,0 +1,132 @@
+package x;
+
+import java.util.Scanner;
+
+public class lab5 {
+
+    static final double[] DENOMINACIONES = {100, 50, 20, 10, 5, 2, 1, 0.50, 0.25, 0.10, 0.05, 0.01};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String continuar;
+
+        do {
+            System.out.println("\n MENÚ PRINCIPAL");
+            System.out.println("1. Desglosar un monto en dólares");
+            System.out.println("2. Calcular monto total desde billetes y monedas");
+            System.out.print("Seleccione una opción (1 o 2): ");
+
+            int opcion = 0;
+            while (true) {
+                if (sc.hasNextInt()) {
+                    opcion = sc.nextInt();
+                    if (opcion == 1 || opcion == 2) break;
+                }
+                System.out.print("❌ Opción inválida. Intente con 1 o 2: ");
+                sc.nextLine();
+            }
+
+            if (opcion == 1) {
+                sc.nextLine(); // limpiar buffer
+                desgloseDesdeMonto(sc);
+            } else {
+                sc.nextLine(); // limpiar buffer
+                totalDesdeCantidades(sc);
+            }
+
+            // Preguntar si desea repetir
+            do {
+                System.out.print("\n¿Deseas realizar otra operación? (S/s/si/N/n/no): ");
+                continuar = sc.nextLine().trim().toLowerCase();
+                if (continuar.isEmpty()) {
+                    System.out.println("⚠️ No puede dejar el campo vacío.");
+                }
+            } while (!continuar.equals("s") && !continuar.equals("si") &&
+                     !continuar.equals("n") && !continuar.equals("no"));
+
+        } while (continuar.equals("s") || continuar.equals("si"));
+
+        System.out.println("\nPrograma finalizado. ¡Gracias por usar el sistema!");
+        sc.close();
+    }
+
+    // Opción 1: Desglosar monto
+    public static void desgloseDesdeMonto(Scanner sc) {
+        double importe = 0;
+        do {
+            System.out.print("Ingrese el monto a desglosar en dólares: ");
+            while (!sc.hasNextDouble()) {
+                System.out.print("❌ Dato inválido. Ingrese un número: ");
+                sc.next();
+            }
+            importe = sc.nextDouble();
+            if (importe <= 0) System.out.println("⚠️ El monto debe ser mayor que cero.");
+        } while (importe <= 0);
+
+        double originalImporte = importe;
+        double[] devolver = new double[DENOMINACIONES.length];
+        int totalBilletes = 0, totalMonedas = 0;
+
+        for (int i = 0; i < DENOMINACIONES.length; i++) {
+            if (importe >= DENOMINACIONES[i]) {
+                devolver[i] = Math.floor(importe / DENOMINACIONES[i]);
+                importe -= devolver[i] * DENOMINACIONES[i];
+                importe = Math.round(importe * 100.0) / 100.0;
+            }
+        }
+
+        System.out.println("\n📄 DESGLOSE DEL MONTO:");
+        for (int i = 0; i < DENOMINACIONES.length; i++) {
+            if (devolver[i] > 0) {
+                if (DENOMINACIONES[i] >= 5) {
+                    System.out.printf(" %2d billetes de: $%.2f\n", (int)devolver[i], DENOMINACIONES[i]);
+                    totalBilletes += devolver[i];
+                } else {
+                    System.out.printf(" %2d monedas de:  $%.2f\n", (int)devolver[i], DENOMINACIONES[i]);
+                    totalMonedas += devolver[i];
+                }
+            }
+        }
+
+        System.out.println("\n RESUMEN:");
+        System.out.println("Total de billetes: " + totalBilletes);
+        System.out.println("Total de monedas: " + totalMonedas);
+        System.out.printf("Monto total desglosado: $%.2f\n", originalImporte);
+    }
+
+    // Opción 2: Calcular total desde cantidades
+    public static void totalDesdeCantidades(Scanner sc) {
+        int totalBilletes = 0, totalMonedas = 0;
+        double total = 0;
+
+        System.out.println("\n INGRESO DE CANTIDADES:");
+        for (int i = 0; i < DENOMINACIONES.length; i++) {
+            int cantidad = -1;
+            do {
+                System.out.printf("Ingrese cantidad de %s de $%.2f: ",
+                        (DENOMINACIONES[i] >= 5 ? "billetes" : "monedas"), DENOMINACIONES[i]);
+
+                while (!sc.hasNextInt()) {
+                    System.out.print("❌ Valor inválido. Ingrese un número entero: ");
+                    sc.next();
+                }
+
+                cantidad = sc.nextInt();
+                if (cantidad < 0) System.out.println("⚠️ No se aceptan cantidades negativas.");
+
+            } while (cantidad < 0);
+
+            total += cantidad * DENOMINACIONES[i];
+
+            if (DENOMINACIONES[i] >= 5)
+                totalBilletes += cantidad;
+            else
+                totalMonedas += cantidad;
+        }
+
+        System.out.println("\n RESUMEN:");
+        System.out.println("Total de billetes: " + totalBilletes);
+        System.out.println("Total de monedas: " + totalMonedas);
+        System.out.printf("Monto total calculado: $%.2f\n", total);
+    }
+}
