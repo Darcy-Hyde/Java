@@ -1,0 +1,150 @@
+package x;
+
+import java.util.Scanner;
+
+public class lab3 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String continuar;
+        String nombre;
+
+        do {
+            System.out.print("Ingrese su nombre: ");
+            nombre = scanner.nextLine().trim();
+
+            if (nombre.isEmpty()) {
+                System.out.println("⚠️ El campo nombre no puede estar vacio. Intente de nuevo.");
+            }
+        } while (nombre.isEmpty());
+
+        
+        String descripcion;
+        do {
+            System.out.print("Ingrese la descripcion del producto: ");
+            descripcion = scanner.nextLine().trim(); // .trim() para eliminar espacios al inicio y al final
+
+            if (descripcion.isEmpty()) {
+                System.out.println("⚠️ La descripción del producto no puede estar vacía. Intente de nuevo.");
+            }
+        } while (descripcion.isEmpty());
+        
+
+
+        int cantidad;
+        do {
+            System.out.print("Ingrese la cantidad del producto: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("⚠ Error: debe ingresar un numero entero.");
+                System.out.print("Ingrese la cantidad del producto: ");
+                scanner.next(); // Limpiar entrada no valida
+            }
+            cantidad = scanner.nextInt();
+            if (cantidad <= 0) {
+                System.out.println("⚠ Error: la cantidad no puede ser cero ni negativa.");
+            }
+        } while (cantidad <= 0);
+
+        double costo;
+        do {
+            System.out.print("Ingrese el costo del producto (50.00 - 750.00): ");
+            while (!scanner.hasNextDouble()) {
+                System.out.println("⚠ Error: debe ingresar un numero valido.");
+                System.out.print("Ingrese el costo del producto (50.00 - 750.00): ");
+                scanner.next(); // Limpiar entrada no valida
+            }
+            costo = scanner.nextDouble();
+            if (costo < 50.00 || costo > 750.00) {
+                System.out.println("⚠ Error: el costo debe estar entre 50.00 y 750.00");
+            }
+        } while (costo < 50.00 || costo > 750.00);
+
+        // Limpiar buffer antes de lectura de forma de pago
+        scanner.nextLine();
+
+        System.out.println();
+
+        System.out.println("Seleccione la forma de pago:");
+        System.out.println("1. Efectivo");
+        System.out.println("2. Yappy");
+        System.out.println("3. Tarjeta de Credito");
+
+        int opcionPago = 0;
+        do {
+            System.out.print("Ingrese la opcion (1-3): ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("⚠ Error: debe ingresar una opcion numerica valida.");
+                System.out.print("Ingrese la opcion (1-3): ");
+                scanner.next();
+            }
+            opcionPago = scanner.nextInt();
+            if (opcionPago < 1 || opcionPago > 3) {
+                System.out.println("⚠ Error: opcion fuera de rango.");
+            }
+        } while (opcionPago < 1 || opcionPago > 3);
+
+        // Limpiar buffer antes de impresion
+        scanner.nextLine();
+
+        // Cálculos
+        double precioVenta = costo + (costo * 0.2675);
+        double totalLinea = cantidad * precioVenta;
+        double porcentajeDescuento = (totalLinea <= 1000) ? 0.0875 : 0.0925;
+        String porcentajeTexto = (totalLinea <= 1000) ? "8.75%" : "9.25%";
+        double descuento = totalLinea * porcentajeDescuento;
+        double subTotal = totalLinea - descuento;
+        double itbms = subTotal * 0.0725;
+        double totalFinal = subTotal + itbms;
+
+        String formaPago;
+        if (opcionPago == 1) {
+            formaPago = "Efectivo";
+        } else if (opcionPago == 2) {
+            formaPago = "Yappy";
+        } else if (opcionPago == 3) {
+            formaPago = "Tarjeta de Credito";
+        } else {
+            formaPago = "Desconocida";
+        }
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        // Salida formateada
+       
+        System.out.println("         		         AVE. 4TA. ESTE, DAVID, CHIRIQUÍ");
+        System.out.println("             	  	           PROPUESTA DE VENTAS");
+        System.out.println("             	   	          AL 10 DE ABRIL DE 2025\n");
+
+        System.out.printf("Programado por: Débora Cisneros);
+        System.out.printf("\nNombre: %-47s Forma de Pago: %s\n\n", nombre, formaPago);
+
+        System.out.printf("%-10s %-20s %-20s %-20s %-20s\n", "Cantidad", "Descripcion", "Costo del Producto", "Precio de Venta", "Total x Linea");
+        System.out.printf("%-10d %-20s %-20.2f %-20.2f %-20.2f\n", cantidad, descripcion, costo, precioVenta, totalLinea);
+        System.out.println();
+        System.out.println("-----------------------------------------------------------------------------");
+        System.out.printf("%80sB/. %.2f\n", "Descuento (" + porcentajeTexto + "):", (descuento));
+        System.out.printf("%80sB/. %.2f\n", "Sub Total: ", subTotal);
+        System.out.printf("%80sB/. %.2f\n", "ITBMS (7.25%): ", itbms);
+        System.out.printf("%80sB/. %.2f\n", "TOTAL A PAGAR: ", totalFinal);
+        System.out.println("-----------------------------------------------------------------------------");
+        System.out.println();
+
+        // Preguntar si desea continuar
+        do {
+            System.out.print("\nDesea realizar otra factura? (S/s/si/N/n/no): ");
+            continuar = scanner.nextLine().trim().toLowerCase();
+
+            if (continuar.isEmpty()) {
+                System.out.println("⚠ Advertencia: No puede dejar el campo vacio.");
+            }
+        } while (
+            continuar.isEmpty() ||
+            !(continuar.equals("s") || continuar.equals("si") ||
+              continuar.equals("n") || continuar.equals("no"))
+        );
+
+        System.out.println("\nPrograma finalizado. Gracias por utilizar el sistema.");
+        scanner.close();
+    }
+}
