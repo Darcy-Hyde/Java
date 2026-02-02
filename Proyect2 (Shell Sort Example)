@@ -1,0 +1,102 @@
+package x;
+
+public class proyect2 {
+
+    // Método para ordenar un arreglo de enteros usando Shell Sort
+    public static void shellSortEnteros(int[] arreglo) {
+        int n = arreglo.length;
+        int iteracion = 1;
+
+        System.out.println("\n--- ORDENAMIENTO DE ENTEROS ---");
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            System.out.println("\nBrecha actual: " + gap);
+
+            for (int i = gap; i < n; i++) {
+                int temp = arreglo[i];
+                int j = i;
+
+                // Desplazamos los elementos mayores hacia adelante
+                while (j >= gap && arreglo[j - gap] > temp) {
+                    arreglo[j] = arreglo[j - gap];
+                    j -= gap;
+                }
+
+                // Insertamos el valor temporal en la posición correcta
+                arreglo[j] = temp;
+
+                // Mostramos el estado del arreglo en cada paso
+                System.out.print("Paso " + (iteracion++) + ": ");
+                imprimirArregloEnteros(arreglo);
+            }
+        }
+    }
+
+    // Método para ordenar un arreglo de Strings usando Shell Sort
+    public static void shellSortNombres(String[] nombres) {
+        int n = nombres.length;
+        int iteracion = 1;
+
+        System.out.println("\n--- ORDENAMIENTO DE NOMBRES ---");
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            System.out.println("\nGap actual: " + gap);
+
+            for (int i = gap; i < n; i++) {
+                String temp = nombres[i];
+                int j = i;
+
+                // Comparamos ignorando mayúsculas/minúsculas
+                while (j >= gap && nombres[j - gap].compareToIgnoreCase(temp) > 0) {
+                    nombres[j] = nombres[j - gap];
+                    j -= gap;
+                }
+
+                nombres[j] = temp;
+
+                // Mostramos los nombres en cada iteración
+                System.out.println("Paso " + (iteracion++) + ": " + String.join(", ", nombres));
+            }
+        }
+    }
+
+    // Método auxiliar para imprimir un arreglo de enteros
+    public static void imprimirArregloEnteros(int[] arreglo) {
+        for (int num : arreglo) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+
+    // Método principal
+    public static void main(String[] args) {
+        // Arreglo de 15 números enteros
+        int[] numeros = {34, 12, 56, 7, 89, 2, 44, 23, 78, 10, 5, 90, 31, 1, 50};
+
+        // Arreglo de 10 nombres
+        String[] nombres = {
+            "Carlos", "Ana", "Elena", "David", "Beatriz",
+            "Juan", "Lucía", "Pedro", "Marta", "Alberto"
+        };
+
+        // Mostrar arreglo original de números
+        System.out.println("Arreglo de enteros original:");
+        imprimirArregloEnteros(numeros);
+
+        // Ordenar los enteros
+        shellSortEnteros(numeros);
+
+        // Mostrar arreglo ordenado
+        System.out.println("\nArreglo de enteros ordenado:");
+        imprimirArregloEnteros(numeros);
+
+        // Mostrar arreglo original de nombres
+        System.out.println("\nNombres originales:");
+        System.out.println(String.join(", ", nombres));
+
+        // Ordenar los nombres
+        shellSortNombres(nombres);
+
+        // Mostrar nombres ordenados
+        System.out.println("\nNombres ordenados:");
+        System.out.println(String.join(", ", nombres));
+    }
+}
