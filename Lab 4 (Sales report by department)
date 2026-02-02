@@ -1,0 +1,127 @@
+package x;
+
+public class lab4A {
+    public static void main(String[] args) {
+
+        // Nombres de Locales y Departamentos
+        String[] nomlocal = {"David", "Boquete", "Barú", "Bugaba", "Frontera"};
+        String[] nomdep = {"Sistemas", "Ferretería", "Accesorios", "Pesca", "Otros"};
+
+        // Ventas por departamento y local
+        double[][] distrVntas = {
+            {1735.09, 1395.03, 1923.85, 1995.85, 1625.33},
+            {1365.25, 1930.85, 1754.45, 1664.33, 1377.22},
+            {1827.58, 1832.56, 1205.33, 1375.35, 1195.22},
+            {1599.85, 1754.95, 1571.45, 1888.23, 1855.32},
+            {1272.45, 1634.36, 1838.78, 1476.89, 1633.87}
+        };
+
+        double[] totaLocal = new double[5];
+        double[] totalDepto = new double[5];
+        double[] promtotaLocal = new double[5];
+        double[] promtotalDepto = new double[5];
+        double sumPromLocal = 0;
+
+        double totalFinal = 0;
+        double sumaPromediosLocales = 0;
+
+        // Cálculo de Totales y Promedios
+        for (int i = 0; i < 5; i++) {
+            double sumaLocal = 0;
+            for (int j = 0; j < 5; j++) {
+                sumaLocal += distrVntas[i][j];
+                totalDepto[j] += distrVntas[i][j];
+            }
+            totaLocal[i] = sumaLocal;
+            promtotaLocal[i] = sumaLocal / 5;
+            totalFinal += sumaLocal;
+
+            sumaPromediosLocales += promtotaLocal[i];
+        }
+
+        for (int j = 0; j < 5; j++) {
+            promtotalDepto[j] = totalDepto[j] / 5;
+        }
+
+        // Búsquedas de mayor/menor valores
+        int localMayor = 0, localMenor = 0;
+        int deptoMayor = 0, deptoMenor = 0;
+        int promLocalMayor = 0, promLocalMenor = 0;
+        int promDeptoMayor = 0, promDeptoMenor = 0;
+        
+
+        for (int i = 1; i < 5; i++) {
+            if (totaLocal[i] > totaLocal[localMayor]) localMayor = i;
+            if (totaLocal[i] < totaLocal[localMenor]) localMenor = i;
+
+            if (totalDepto[i] > totalDepto[deptoMayor]) deptoMayor = i;
+            if (totalDepto[i] < totalDepto[deptoMenor]) deptoMenor = i;
+
+            if (promtotaLocal[i] > promtotaLocal[promLocalMayor]) promLocalMayor = i;
+            if (promtotaLocal[i] < promtotaLocal[promLocalMenor]) promLocalMenor = i;
+
+            if (promtotalDepto[i] > promtotalDepto[promDeptoMayor]) promDeptoMayor = i;
+            if (promtotalDepto[i] < promtotalDepto[promDeptoMenor]) promDeptoMenor = i;
+        }
+
+     // Mostrar Reporte
+        System.out.println("\n==============================================================================================================================");
+        System.out.println("					DISTRIBUIDORA DE FERRETERIA & ACCESORIOS, S. A.");
+        System.out.println("     					     REPORTE DE VENTAS POR DEPARTAMENTOS");
+        System.out.println("==============================================================================================================================");
+        System.out.println("Programado por: Débora Cisneros");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------\n");
+
+        // Encabezado de la tabla
+        System.out.printf("%-15s", "LOCALES");
+        for (String depto : nomdep) {
+            System.out.printf("%15s", depto);
+        }
+        System.out.printf("%18s%18s\n", "Total x Local", "Prom. x Local");
+
+        // Cuerpo de la tabla (ventas por local y depto)
+        for (int i = 0; i < 5; i++) {
+            System.out.printf("%-15s", nomlocal[i]);
+            for (int j = 0; j < 5; j++) {
+                System.out.printf("%15.2f", distrVntas[i][j]);
+            }
+            System.out.printf("%18.2f%18.2f\n", totaLocal[i], promtotaLocal[i]);
+        }
+
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------");
+
+        // Totales por departamento
+        System.out.printf("%-15s", "Total x Depto");
+        for (double total : totalDepto) {
+            System.out.printf("%15.2f", total);
+        }
+        System.out.printf("%18.2f%18s\n", totalFinal, "");
+
+
+        // Promedios por departamento
+        System.out.printf("%-15s", "Prom x Depto");
+        for (double prom : promtotalDepto) {
+            System.out.printf("%15.2f", prom);
+        }
+        System.out.printf("%18s%18.2f\n", "", sumaPromediosLocales);
+        
+        System.out.println("\n");
+        System.out.println("\n");
+
+        // Resumen final
+        System.out.println("");
+        System.out.println("📌 RESUMEN FINAL");
+        System.out.println("---------------------------------------------------------------");
+        System.out.printf("El Local de Menor Valor es:         %-12s por un valor de $%.2f\n", nomlocal[localMenor], totaLocal[localMenor]);
+        System.out.printf("El Local de Mayor Valor es:         %-12s por un valor de $%.2f\n", nomlocal[localMayor], totaLocal[localMayor]);
+
+        System.out.printf("El Departamento de Menor Valor es:  %-12s por un valor de $%.2f\n", nomdep[deptoMenor], totalDepto[deptoMenor]);
+        System.out.printf("El Departamento de Mayor Valor es:  %-12s por un valor de $%.2f\n", nomdep[deptoMayor], totalDepto[deptoMayor]);
+
+        System.out.printf("El Promedio del Local de Menor es:  %-12s por un valor de $%.2f\n", nomlocal[promLocalMenor], promtotaLocal[promLocalMenor]);
+        System.out.printf("El Promedio del Local de Mayor es:  %-12s por un valor de $%.2f\n", nomlocal[promLocalMayor], promtotaLocal[promLocalMayor]);
+
+        System.out.printf("El Prom. del Depto de Menor Valor:  %-12s por un valor de $%.2f\n", nomdep[promDeptoMenor], promtotalDepto[promDeptoMenor]);
+        System.out.printf("El Prom. del Depto de Mayor Valor:  %-12s por un valor de $%.2f\n", nomdep[promDeptoMayor], promtotalDepto[promDeptoMayor]);
+    }
+}
